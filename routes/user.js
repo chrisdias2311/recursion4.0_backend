@@ -82,11 +82,11 @@ router.post("/login", async (req, res) => {
             const match = await bcrypt.compare(req.body.password, user.password);
             if (match) {
                 console.log('match')
-                res.send(user).send(200); //dont think we should send user!!!!
+                res.send(user).status(200); //dont think we should send user!!!!
             }
             else {
                 console.log('incorrect password')
-                res.send('incorrect password')
+                res.send('incorrect password').status(400)
             }
         } else {
             res.send("No user found").status(400);
