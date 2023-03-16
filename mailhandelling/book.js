@@ -17,7 +17,7 @@ async function sendBooked(product_name, email) {
 
 
     let info = await transporter.sendMail({
-        from: 'UniEx <uniexsfit@gmail.com>',
+        from: 'UniEx <jasonsampy88@gmail.com>',
         to: email,
         subject: "Product Booked",
         attachments: {
@@ -29,11 +29,10 @@ async function sendBooked(product_name, email) {
             product: product_name,
         },
         html: `
-            <body style = "background-color: #212121;">
-            <center><img style="width:10em;" src="cid:logo"></center>
-            <div style="background-color: #262626;color:antiquewhite; ">
-                <h1 style="text-align: center;padding-top: 20px;">Your ${product_name} was successfully booked!</h1>
-                <h2 style="padding-top: 20px;padding-bottom: 50px;text-align: center;" >Check your UniEx dashboard for further details. Thanks for choosing UniEx! </h2></div></body>
+            <body >
+            <div >
+                <h1 >Your ${product_name} was successfully booked!</h1>
+                <h2 >Check your UniEx dashboard for further details. Thanks for choosing UniEx! </h2></div></body>
             `
     })
     console.log("message has been sent: %s", info.messageId);

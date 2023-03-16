@@ -34,7 +34,7 @@ router.post("/addproduct", multer.upload.single("file"), async (req, res) => {
             bookedBy: '',
             bookingStatus: 'available',
             sellingDate: (new Date).toString(),
-            //productImage: `${URL}/api/image/${req.file.filename}`,
+            productImage: [`${URL}/api/image/${req.file.filename}`],
         });
 
         const saved = await newProduct.save();
