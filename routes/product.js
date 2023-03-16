@@ -46,8 +46,10 @@ router.post("/addproduct", multer.upload.single("file"), async (req, res) => {
 
             }
             else {
-                res.send(product._id).status(200);
-                console.log(product._id);
+                let productId = product._id.toString();
+                let slice = productId.slice(14, 38);
+                res.send(slice).status(200);
+                console.log(slice);
 
             }
         });
