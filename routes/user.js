@@ -82,17 +82,17 @@ router.post("/login", async (req, res) => {
             const match = await bcrypt.compare(req.body.password, user.password);
             if (match) {
                 console.log('match')
-                res.send(user); //dont think we should send user!!!!
+                res.send(user).send(200); //dont think we should send user!!!!
             }
             else {
                 console.log('incorrect password')
                 res.send('incorrect password')
             }
         } else {
-            res.send("No user found");
+            res.send("No user found").status(400);
         }
     } catch (error) {
-        res.send(error);
+        res.send(error).status(400);
         console.log(error);
     }
 })
@@ -118,12 +118,14 @@ router.post('/getuser', async (req, res) => {
     try {
         let user = await User.findOne({ email: (req.body.verifyEmail).toLowerCase() })
         if (user) {
-            res.send(user)
+            res.send(user).send(200);
         } else {
-            res.send("No user found")
+            res.send("No seller found").send(400);
         }
     } catch (error) {
 
+        console.log(err);
+        res.status(500).send('internal error')
     }
 })
 

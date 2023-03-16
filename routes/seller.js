@@ -156,18 +156,18 @@ router.get('/allsellers', async (req, res) => {
     }
 })
 
-router.get('/getseller/:id', async (req, res) => {
+router.post('/getseller', async (req, res) => {
     try {
-        console.log(req.params.id)
-        let seller = await Seller.findOne({ _id: mongoose.Types.ObjectId(req.params.id) })
+        let seller = await Seller.findOne({ email: (req.body.verifyEmail).toLowerCase() })
         if (seller) {
-            res.send(seller);
+            res.send(seller).send(200);
+        } else {
+            res.send("No seller found").send(400);
         }
-    } catch (err) {
+    } catch (error) {
+
         console.log(err);
-        res.status(400).send('couldnt find seller')
+        res.status(500).send('internal error')
     }
-
 })
-
 module.exports = router;
