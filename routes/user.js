@@ -30,7 +30,6 @@ router.post("/register", async (req, res) => {
             return
         } else {
 
-            console.log("This is REQ FILE =", req.file);
             //bcrypt encryption
             bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
                 console.log(hash);
