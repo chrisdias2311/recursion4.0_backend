@@ -54,7 +54,8 @@ router.post('/settracker', async (req, res) => {
                     productId: req.body.productId,
                     arrival: req.body.arrival,
                     ordered: req.body.data,
-                    status: req.body.status
+                    status: req.body.status,
+                    location:req.body.location
                 }
             )
             const saved = await newTrack.save((error, track) => {

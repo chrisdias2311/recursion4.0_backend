@@ -73,6 +73,23 @@ router.get('/allproducts', async (req, res) => {
     }
 })
 
+router.get('/productdetails', async (req, res) => {
+    try {
+        let product = await Product.findOne({ _id: mongoose.Types.ObjectId(req.body.id) })
+        if (product) {
+            res.send(product).status(200);
+        }
+        else {
+            res.send('product dosnt exist').status(400)
+
+        }
+    } catch (error) {
+        res.send(error).status(500)
+        console.log(error)
+    }
+}
+})
+
 router.post('/myproducts', async (req, res) => {
     try {
         // console.log(req.body.ownerId)

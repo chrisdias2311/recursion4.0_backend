@@ -14,6 +14,9 @@ const trackSchema = mongoose.Schema({
     status: {
         type: String,
     },
+    location: {
+        type: String,
+    }
 });
 
 

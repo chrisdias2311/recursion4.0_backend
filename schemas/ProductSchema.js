@@ -40,6 +40,9 @@ const productSchema = mongoose.Schema({
     },
     targetage: {
         type: String,
+    },
+    rating: {
+        type: String,
     }
 });
 
