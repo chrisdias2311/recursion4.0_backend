@@ -336,7 +336,7 @@ router.post('/selectproduct', async (req, res) => {
             let tracker;
             res.send(update).status(200)
             try {
-                let arrival_date = (new Date() + 2).toString()
+                let arrival_date = (new Date).toString()
 
                 let slicedarrival = arrival_date.substring(0, 16);
                 let transDate = (new Date).toString()
