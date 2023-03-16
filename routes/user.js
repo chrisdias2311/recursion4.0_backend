@@ -27,7 +27,7 @@ router.post("/register", async (req, res) => {
         if (user) {
             console.log(user)
             res.status(400).send("Account already exists");
-            return
+
         } else {
 
             //bcrypt encryption
