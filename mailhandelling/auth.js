@@ -19,7 +19,7 @@ async function sendOtp(otp, email) {
 
     try {
         let info = await transporter.sendMail({
-            from: 'UniEx <jasonsampy88@gmail.com>',
+            from: 'E-mart <jasonsampy88@gmail.com>',
             to: email,
             subject: "OTP verification",
             text: "Your otp is " + otp + "do not reply",

@@ -32,7 +32,7 @@ async function sendBooked(product_name, email) {
             <body >
             <div >
                 <h1 >Your ${product_name} was successfully booked!</h1>
-                <h2 >Check your UniEx dashboard for further details. Thanks for choosing UniEx! </h2></div></body>
+                <h2 >Check your E-mart dashboard for further details. Thanks for choosing UniEx! </h2></div></body>
             `
     })
     console.log("message has been sent: %s", info.messageId);
