@@ -40,7 +40,16 @@ router.post("/addproduct", multer.upload.single("file"), async (req, res) => {
         });
         let productId;
         const saved = await newProduct.save(function (err, product) {
-            res.send(product._id).status(200);
+            if (err) {
+                console.log(err);
+                res.send('bad request').status(400)
+
+            }
+            else {
+                res.send(product._id).status(200);
+                console.log(product._id);
+
+            }
         });
     } catch (error) {
         console.log(error);
