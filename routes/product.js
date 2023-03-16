@@ -333,34 +333,45 @@ router.post('/selectproduct', async (req, res) => {
     let Find = await Product.findOne({ _id: mongoose.Types.ObjectId(req.body.id) });
     if (Find) {
         const update = await Product.updateOne({ _id: mongoose.Types.ObjectId(req.body.id) }, { $set: { quantity: (Find.quantity - 1) } })
-        if ((Find.quantity - 1) < 1) {
-            let toDelete = await Product.findOne({ _id: mongoose.Types.ObjectId(req.body.id) });
-            // let gfs = multer.gfs.grid
-            let filename = toDelete.productImage
 
-            let temp = []
-            temp = filename.split("/")
-            console.log(temp)
-            let removingFile = temp[temp.length - 1]
-            // user_icon_1662560350693undefined
-            // console.log(removingFile);
-            let gridfsBucket;
-            console.log(removingFile)
+        res.send(update).status(200)
+        try {
+            const tracker = await Track.findOne({ productId: req.body.productId })
+        } catch (error) {
+            console.log(error);
+            res.send('internal error').status(500);
+        }
+        if (tracker) {
+            console.log(tracker)
+            res.status(400).send('package is already bieng tracked');
+            return
+        } else {
             try {
-                gridfsBucket = new mongoose.mongo.GridFSBucket(mongoose.connections[0].db, {
-                    bucketName: "uploads",
-                });
 
-                const img = await gridfsBucket.find({ filename: removingFile }).toArray();
-                img.map(async (doc) => {
-                    const del = await gridfsBucket.delete(doc._id)
-                    console.log(del)
-                })
+                const newTrack = new Track(
+                    {
+                        productId: req.body.productId,
+                        arrival: req.body.arrival,
+                        ordered: req.body.data,
+                        status: req.body.status,
+                        location: req.body.location
+                    }
+                )
+                const saved = await newTrack.save((error, track) => {
+                    if (error) {
+                        console.log(error);
+                        res.send(400, 'bad request');
+                    }
+
+                    else {
+                        res.send('tracker set').status(200);
+                    }
+                });
             } catch (error) {
-                res.send('error deleting').status(400)
+                console.log(error)
+                res.send('internal error').status(500);
             }
         }
-        res.send(update).status(200)
     }
     else {
         res.send('product dosnt exist').status(400)
