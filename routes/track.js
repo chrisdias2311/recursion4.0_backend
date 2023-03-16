@@ -1,4 +1,5 @@
 const express = require('express');
+const ProductSchema = require('../schemas/ProductSchema');
 const router = express.Router();
 
 const Track = require('../schemas/TrackSchema');
@@ -89,5 +90,21 @@ router.post('/getalltrackers', async (req, res) => {
         res.send('internal error').status(500);
     }
 })
+
+router.post('/gettracker', async (req, res) => {
+    try {
+        const product = await ProductSchema.find({ name: { $regex: req.body.query } })
+        let trackers = [];
+        let test = product.forEach(async (element) => {
+            let temp = await Track.Find({ productId: element._id })
+            trackers.push(temp)
+        })
+        res.send(trackers).status(200);
+    } catch (error) {
+        console.log(error)
+        res.send('error').status(400)
+    }
+})
+
 
 module.exports = router;
