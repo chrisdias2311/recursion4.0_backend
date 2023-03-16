@@ -254,6 +254,7 @@ router.get('/generateotp/:id', async (req, res) => {
             try {
                 let test = await User.updateOne({ _id: mongoose.Types.ObjectId(user._id) }, { $set: { verified: otp } })
                 console.log(test);
+                console.log(user.email)
                 auth.sendOtp(otp, user.email);
                 console.log(user.email)
                 res.status(200).send('generated');

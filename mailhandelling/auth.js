@@ -10,8 +10,8 @@ async function sendOtp(otp, email) {
             port: 587,
             secure: false,
             auth: {
-                user: "jasonsampy88@gmail.com", //add acc
-                pass: "pohdsrsqvrvohkzv"//change
+                user: "jasonsampypvt@gmail.com", //add acc
+                pass: "eaockuyawqgmeywj"//change
             }
         }
     );
@@ -19,7 +19,7 @@ async function sendOtp(otp, email) {
 
     try {
         let info = await transporter.sendMail({
-            from: 'E-mart <jasonsampy88@gmail.com>',
+            from: 'E-mart <jasonsampypvt@gmail.com>',
             to: email,
             subject: "OTP verification",
             text: "Your otp is " + otp + "do not reply",
