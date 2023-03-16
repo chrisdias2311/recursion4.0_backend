@@ -57,6 +57,7 @@ app.use('/api/transactions', require('./routes/transactions'))
 app.use('/api/uploadimg', require('./routes/fileupload'))
 app.use('/api/seller', require('./routes/seller'))
 
+app.use('/api/track', require('./routes/track'))
 
 
 

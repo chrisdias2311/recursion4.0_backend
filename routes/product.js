@@ -12,10 +12,11 @@ const jwt = require('jsonwebtoken');
 const multer = require('../middlewares/multer')
 const sendMail = require('../mailhandelling/book')
 const Retailer = require('../schemas/SellerSchema');
+const { read } = require('fs');
 
 const secretKey = "secretKey";
 
-const URL = `https://recursion4-0-backend-server.onrender.com`
+const URL = `https://localhost:5000`
 
 
 
@@ -30,11 +31,12 @@ router.post("/addproduct", multer.upload.single("file"), async (req, res) => {
             description: req.body.description,
             category: req.body.category,
             price: req.body.price,
-            link: req.body.link,
-            bookedBy: '',
             bookingStatus: 'available',
             sellingDate: (new Date).toString(),
             productImage: [`${URL}/api/image/${req.file.filename}`],
+            quantity: req.body.quantity,
+            targetgender: req.body.targetgender,
+            targetage: req.body.targetage
         });
 
         const saved = await newProduct.save();
@@ -91,6 +93,7 @@ router.post('/bookedproducts', async (req, res) => {
 
 router.post('/bookproduct', async (req, res) => {
     try {
+
         let toDelete = await Product.findOne({ _id: mongoose.Types.ObjectId(req.body.id) });
         // let gfs = multer.gfs.grid
         let filename = toDelete.productImage
@@ -297,7 +300,42 @@ router.post('/deleteproduct', async (req, res) => {
 })
 
 
+router.post('/selectproduct', async (req, res) => {
+    let Find = await Product.findOne({ _id: mongoose.Types.ObjectId(req.body.id) });
+    if (Find) {
+        const update = await Product.updateOne({ _id: mongoose.Types.ObjectId(req.body.id) }, { $set: { quantity: (Find.quantity - 1) } })
+        if ((Find.quantity - 1) < 1) {
+            let toDelete = await Product.findOne({ _id: mongoose.Types.ObjectId(req.body.id) });
+            // let gfs = multer.gfs.grid
+            let filename = toDelete.productImage
 
+            let temp = []
+            temp = filename.split("/")
+            console.log(temp)
+            let removingFile = temp[temp.length - 1]
+            // user_icon_1662560350693undefined
+            // console.log(removingFile);
+            let gridfsBucket;
+            console.log(removingFile)
+            try {
+                gridfsBucket = new mongoose.mongo.GridFSBucket(mongoose.connections[0].db, {
+                    bucketName: "uploads",
+                });
 
+                const img = await gridfsBucket.find({ filename: removingFile }).toArray();
+                img.map(async (doc) => {
+                    const del = await gridfsBucket.delete(doc._id)
+                    console.log(del)
+                })
+            } catch (error) {
+                res.send('error deleting').status(400)
+            }
+        }
+        res.send(update).status(200)
+    }
+    else {
+        res.send('product dosnt exist').status(400)
+    }
+})
 
 module.exports = router;

@@ -21,12 +21,6 @@ const productSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    link: {
-        type: String,
-    },
-    bookedBy: {
-        type: String,
-    },
     bookingStatus: {
         type: String,
     },
@@ -37,7 +31,16 @@ const productSchema = mongoose.Schema({
         type: String,
         // required: true,
         // required: true
-    }]
+    }],
+    quantity: {
+        type: Number,
+    },
+    targetgender: {
+        type: String,
+    },
+    targetage: {
+        type: String,
+    }
 });
 
 
