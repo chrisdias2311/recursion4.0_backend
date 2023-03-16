@@ -13,31 +13,31 @@ const productSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    category:{
-        type:String,
+    category: {
+        type: String,
         required: true,
     },
-    price:{
-        type:String,
+    price: {
+        type: String,
         required: true,
     },
-    link:{
-        type:String,
-    },
-    bookedBy:{
+    link: {
         type: String,
     },
-    bookingStatus:{
+    bookedBy: {
         type: String,
     },
-    sellingDate:{
-        type:String,
+    bookingStatus: {
+        type: String,
     },
-    productImage: {
+    sellingDate: {
+        type: String,
+    },
+    productImage: [{
         type: String,
         // required: true,
         // required: true
-    }
+    }]
 });
 
 

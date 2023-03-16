@@ -12,17 +12,17 @@ const mongoose = require('mongoose')
 const pass_otp = require('../mailhandelling/passotp')
 const secretKey = "secretKey";
 
-const URL = `https://uniexserver.onrender.com`
+const URL = `https://localhost:5000`//`https://uniexserver.onrender.com` 
 
 
 
 
 //Rigister (alternative to Signup)
-router.post("/register", multer.upload.single("file"), async (req, res) => {
+router.post("/register", async (req, res) => {
 
     const saltRounds = 10;
     try {
-        const user = await User.findOne({ email: req.body.email })
+        const user = await User.findOne({ email: (req.body.email).toLowerCase() })
 
         if (user) {
             console.log(user)
@@ -39,19 +39,15 @@ router.post("/register", multer.upload.single("file"), async (req, res) => {
                 }
                 else {
                     const newUser = new User({
-                        pid: req.body.pid,
-                        email: req.body.email,
+                        email: (req.body.email).toLowerCase(),
                         firstname: req.body.firstname,
                         lastname: req.body.lastname,
                         phone: req.body.phone,
-                        year: req.body.year,
-                        dept: req.body.dept,
-                        class: req.body.class,
+                        gender: req.body.gender,
+                        age: req.body.gender,
                         password: hash,
-                        IDcard: `${URL}/api/image/${req.file.filename}`,
-                        validity: 'No', //Default validity of user is no 
                         verified: 'No',
-                        otp: "null"
+                        otp: "null",
                     });
                     const saved = await newUser.save((err, user) => {
                         if (err) {
@@ -63,17 +59,10 @@ router.post("/register", multer.upload.single("file"), async (req, res) => {
                             res.send(user)
                         }
                     });
-                    // if (saved){
 
-                    //     send_data = await User.findOne({ email:req.body.email },{password:0});
-                    //     res.send(send_data)
-                    // }
                 }
             })
         }
-        //const saved = await newUser.save();
-        // res.send(newUser);
-        //res.send(newUser)
     } catch (error) {
         console.log(error);
         res.send(error)
@@ -82,27 +71,11 @@ router.post("/register", multer.upload.single("file"), async (req, res) => {
 })
 
 
-// router.post("/login", async (req, res) => {
-//     if (req.body.password && req.body.email) {
-//         let user = await User.findOne(req.body);
-//         if (user) {
-//             jwt.sign({ user }, secretKey, { expiresIn: '2h' }, (err, token) => {
-//                 if (err) {
-//                     console.log(err);
-//                     res.send(err);
-//                 }
-//                 res.send({ user, auth: token })
-//             })
-//         } else {
-//             res.send({ result: 'No user found' });
-//         }
-//     }
-// })
 
 router.post("/login", async (req, res) => {
     try {
         console.log("The request:", req.body)
-        let user = await User.findOne({ email: req.body.email });
+        let user = await User.findOne({ email: (req.body.email).toLowerCase() });
 
         console.log(user);
         if (user) {
@@ -144,7 +117,7 @@ router.get('/invalidusers', async (req, res) => {
 
 router.post('/getuser', async (req, res) => {
     try {
-        let user = await User.findOne({ email: req.body.verifyEmail })
+        let user = await User.findOne({ email: (req.body.verifyEmail).toLowerCase() })
         if (user) {
             res.send(user)
         } else {
@@ -270,7 +243,7 @@ router.put("/declineuser/:id", async (req, res) => {
 router.get('/generateotp/:id', async (req, res) => {
 
     const otp = otpGenerator.generate(6, { lowerCaseAlphabets: false, specialChars: false });
-    const user = await User.findOne({ email: req.params.id })
+    const user = await User.findOne({ email: (req.params.id).toLowerCase() })
 
     if (user) {
         if (user.verified === 'yes') {
@@ -295,7 +268,7 @@ router.get('/generateotp/:id', async (req, res) => {
 
 router.get('/verifyotp/:id/:otp', async (req, res) => {
 
-    const user = await User.findOne({ email: req.params.id });
+    const user = await User.findOne({ email: (req.params.id).toLowerCase() });
     console.log(user);
 
     if (user) {
@@ -305,7 +278,7 @@ router.get('/verifyotp/:id/:otp', async (req, res) => {
         else {
             if (user.verified == req.params.otp) {
                 console.log('passed')
-                const update = await User.updateOne({ email: req.params.id }, { $set: { verified: 'yes' } })
+                const update = await User.updateOne({ email: (req.params.id).toLowerCase() }, { $set: { verified: 'yes' } })
                 console.log("verified");
                 res.send(update);
 
@@ -320,82 +293,13 @@ router.get('/verifyotp/:id/:otp', async (req, res) => {
 })
 
 
-router.post('/updateuser', async (req, res) => {
-    try {
-        console.log(req.body)
-        let updated = await User.updateOne(
-            { _id: mongoose.Types.ObjectId(req.body.user_id) },
-            {
-                $set: {
-                    year: req.body.year,
-                    dept: req.body.department,
-                    class: req.body.class
-                }
-            }
-        )
-        console.log(updated)
-        res.send(updated)
-    } catch (error) {
-        console.log(error)
-    }
-})
 
-router.post('/deleteuser', async (req, res) => {
-    try {
-        let gridfsBucket;
-        let removingFile;
-        try {
-            let toDelete = await User.findOne({ _id: mongoose.Types.ObjectId(req.body.id) });
-            console.log("To Delete ", toDelete)
-
-            let filename = toDelete.IDcard;
-
-            let temp = []
-            temp = filename.split("/")
-            console.log(temp)
-            removingFile = temp[temp.length - 1]
-            console.log(removingFile);
-
-        } catch (err) {
-            console.log(err)
-        }
-
-        try {
-            gridfsBucket = new mongoose.mongo.GridFSBucket(mongoose.connections[0].db, {
-                bucketName: "uploads",
-            });
-
-            const img = await gridfsBucket.find({ filename: removingFile }).toArray();
-            img.map(async (doc) => {
-                const del = await gridfsBucket.delete(doc._id)
-                console.log(del)
-            })
-
-        } catch (error) {
-            console.log("Not Done")
-        }
-
-
-
-        try {
-            const result = await User.deleteOne({ _id: mongoose.Types.ObjectId(req.body.id) });
-            console.log("Deleted", result)
-            res.send(result);
-        } catch (error) {
-            console.log(error)
-            res.send(error)
-        }
-
-    } catch (error) {
-        res.status(400).send("UNSUCCESSFUL")
-    }
-})
 
 
 router.get('/generateotp_pass/:id', async (req, res) => {
 
     const otp = otpGenerator.generate(6, { lowerCaseAlphabets: false, specialChars: false });
-    const user = await User.findOne({ email: req.params.id })
+    const user = await User.findOne({ email: (req.params.id).toLowerCase() })
     console.log("This is request id", req.params.id)
     if (user) {
         try {
@@ -417,11 +321,11 @@ router.get('/generateotp_pass/:id', async (req, res) => {
 
 router.get('/verifyotp_pass/:id/:otp', async (req, res) => {
 
-    const user = await User.findOne({ email: req.params.id });
+    const user = await User.findOne({ email: (req.params.id).toLowerCase() });
 
     if (user) {
         if (user.otp === req.params.otp) {
-            const u_otp = await User.updateOne({ email: req.params.id }, { $set: { otp: 'verified' } });
+            const u_otp = await User.updateOne({ email: (req.params.id).toLowerCase() }, { $set: { otp: 'verified' } });
             res.status(200).send('verified_otp');
             //res.redirect       
         }
@@ -436,7 +340,7 @@ router.get('/verifyotp_pass/:id/:otp', async (req, res) => {
 
 router.get('/change_pass/:id/:newpassword', async (req, res) => {
 
-    const user = await User.findOne({ email: req.params.id });
+    const user = await User.findOne({ email: (req.params.id).toLowerCase() });
     const saltRounds = 10;
     if (user) {
         if (user.otp === 'verified') {
@@ -446,7 +350,7 @@ router.get('/change_pass/:id/:newpassword', async (req, res) => {
                     res.send(err)
                 }
                 else {
-                    const u_pass = await User.updateOne({ email: req.params.id }, { $set: { password: hash } });
+                    const u_pass = await User.updateOne({ email: (req.params.id).toLowerCase() }, { $set: { password: hash } });
                     console.log(u_pass);
                     console.log(hash)
                     res.status(200).send(hash)

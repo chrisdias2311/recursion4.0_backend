@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { stringify } = require("querystring");
 
-const userSchema = mongoose.Schema({
+const sellerSchema = mongoose.Schema({
     email: {
         type: String,
         required: true,
@@ -35,12 +35,8 @@ const userSchema = mongoose.Schema({
     },
     otp: {
         type: String,
-    },
-
+    }
 });
 
 
-// userSchema.plugin(passportLocalMongoose);
-// userSchema.plugin(findOrCreate);
-
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('Seller', sellerSchema);
