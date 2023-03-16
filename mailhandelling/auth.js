@@ -23,11 +23,7 @@ async function sendOtp(otp, email) {
             to: email,
             subject: "OTP verification",
             text: "Your otp is " + otp + "do not reply",
-            attachments: {
-                filename: 'Logo.jpeg',
-                path: __dirname + '/Logo.jpeg',
-                cid: 'logo'
-            },
+
             html: `
         <body >
             <div >

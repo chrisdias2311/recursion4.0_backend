@@ -1,8 +1,9 @@
 const express = require('express');
 const ProductSchema = require('../schemas/ProductSchema');
 const router = express.Router();
-
+const User = require('../schemas/Userschema')
 const Track = require('../schemas/TrackSchema');
+const { default: mongoose } = require('mongoose');
 
 
 router.post('/update', async (req, res) => {
@@ -24,8 +25,10 @@ router.post('/update', async (req, res) => {
 router.post('/getstatus', async (req, res) => {
     try {
         const FindProduct = await Track.findOne({ productId: req.body.product })
+        const Buyer = await User.findOne({ email: FindProduct.buyeremail })
+        const Image = await ProductSchema.findOne({ _id: mongoose.Types.ObjectId(FindProduct.productId) })
         if (FindProduct) {
-            res.status(200).send(FindProduct);
+            res.status(200).send(FindProduct, Buyer.firstname, Image.productImage);
         }
     }
     catch (error) {
@@ -55,7 +58,7 @@ router.post('/settracker', async (req, res) => {
                     arrival: req.body.arrival,
                     ordered: req.body.data,
                     status: req.body.status,
-                    location:req.body.location
+                    location: req.body.location
                 }
             )
             const saved = await newTrack.save((error, track) => {
