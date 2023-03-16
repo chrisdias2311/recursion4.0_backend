@@ -334,7 +334,6 @@ router.post('/selectproduct', async (req, res) => {
         if (Find) {
             const update = await Product.updateOne({ _id: mongoose.Types.ObjectId(req.body.id) }, { $set: { quantity: (Find.quantity - 1) } })
             let tracker;
-            res.send(update).status(200)
             try {
                 let arrival_date = (new Date).toString()
 
