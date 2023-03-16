@@ -33,7 +33,7 @@ router.post("/addproduct", multer.upload.single("file"), async (req, res) => {
             price: req.body.price,
             bookingStatus: 'available',
             sellingDate: (new Date).toString(),
-            productImage: [`${URL}/api/image/${req.file.filename}`],
+            productImage: `${URL}/api/image/${req.file.filename}`,
             quantity: req.body.quantity,
             targetgender: req.body.targetgender,
             targetage: req.body.targetage
@@ -61,7 +61,7 @@ router.post("/addproduct", multer.upload.single("file"), async (req, res) => {
 
 router.get('/allproducts', async (req, res) => {
     try {
-        let products = await Product.find({ bookingStatus: 'available' });
+        let products = await Product.find({});
         if (products.length > 0) {
             products.reverse();
             res.send(products);

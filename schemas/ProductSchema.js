@@ -27,11 +27,11 @@ const productSchema = mongoose.Schema({
     sellingDate: {
         type: String,
     },
-    productImage: [{
+    productImage: {
         type: String,
         // required: true,
         // required: true
-    }],
+    },
     quantity: {
         type: Number,
     },
