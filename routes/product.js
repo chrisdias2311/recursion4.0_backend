@@ -88,7 +88,7 @@ router.get('/productdetails', async (req, res) => {
         console.log(error)
     }
 }
-})
+)
 
 router.post('/myproducts', async (req, res) => {
     try {
