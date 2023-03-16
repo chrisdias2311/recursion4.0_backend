@@ -86,7 +86,7 @@ router.post('/settracker', async (req, res) => {
 
 router.post('/getalltrackers', async (req, res) => {
     try {
-        const trackers = await Track.Find({})
+        const trackers = await Track.find({})
         if (trackers.length > 0) {
             trackers.reverse();
             res.send(trackers).status(200)
