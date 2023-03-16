@@ -342,7 +342,7 @@ router.post('/selectproduct', async (req, res) => {
             let slicedDate = transDate.substring(0, 16);
             const newTrack = new Track(
                 {
-                    productId: req.body.productId,
+                    productId: req.body.id,
                     arrival: slicedarrival,
                     ordered: slicedDate,
                     status: 'Ordered',
@@ -353,7 +353,7 @@ router.post('/selectproduct', async (req, res) => {
             const saved = await newTrack.save((error, track) => {
                 if (error) {
                     console.log(error);
-                    res.send(400, 'bad request');
+                    res.status(400).send("Bad req")
                 }
 
                 else {
