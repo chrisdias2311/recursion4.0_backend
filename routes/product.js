@@ -330,44 +330,48 @@ router.post('/deleteproduct', async (req, res) => {
 
 router.post('/selectproduct', async (req, res) => {
     let Find = await Product.findOne({ _id: mongoose.Types.ObjectId(req.body.id) });
-    if (Find) {
-        const update = await Product.updateOne({ _id: mongoose.Types.ObjectId(req.body.id) }, { $set: { quantity: (Find.quantity - 1) } })
-        let tracker;
-        res.send(update).status(200)
-        try {
-            let arrival_date = (new Date() + 2).toString()
+    try {
+        if (Find) {
+            const update = await Product.updateOne({ _id: mongoose.Types.ObjectId(req.body.id) }, { $set: { quantity: (Find.quantity - 1) } })
+            let tracker;
+            res.send(update).status(200)
+            try {
+                let arrival_date = (new Date() + 2).toString()
 
-            let slicedarrival = arrival_date.substring(0, 16);
-            let transDate = (new Date).toString()
-            let slicedDate = transDate.substring(0, 16);
-            const newTrack = new Track(
-                {
-                    productId: req.body.id,
-                    arrival: slicedarrival,
-                    ordered: slicedDate,
-                    status: 'Ordered',
-                    location: req.body.location,
-                    buyeremail: req.body.buyeremail,
-                }
-            )
-            const saved = await newTrack.save((error, track) => {
-                if (error) {
-                    console.log(error);
-                    res.status(400).send("Bad req")
-                }
+                let slicedarrival = arrival_date.substring(0, 16);
+                let transDate = (new Date).toString()
+                let slicedDate = transDate.substring(0, 16);
+                const newTrack = new Track(
+                    {
+                        productId: req.body.id,
+                        arrival: slicedarrival,
+                        ordered: slicedDate,
+                        status: 'Ordered',
+                        location: req.body.location,
+                        buyeremail: req.body.buyeremail,
+                    }
+                )
+                const saved = await newTrack.save((error, track) => {
+                    if (error) {
+                        console.log(error);
+                        res.status(400).send("Bad req")
+                    }
 
-                else {
-                    res.send('tracker set').status(200);
-                }
-            });
-        } catch (error) {
-            console.log(error)
-            res.send('internal error').status(500);
+                    else {
+                        res.send('tracker set').status(200);
+                    }
+                });
+            } catch (error) {
+                console.log(error)
+                res.send('internal error').status(500);
+            }
         }
-    }
 
-    else {
-        res.send('product dosnt exist').status(400)
+        else {
+            res.send('product dosnt exist').status(400)
+        }
+    } catch (error) {
+        res.send('internal error').status(500);
     }
 })
 
