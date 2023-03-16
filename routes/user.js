@@ -23,7 +23,7 @@ router.post('/gettransactions', async (req, res) => {
     });
 
     if (tracker) {
-        res.send(tracker).status(200)
+        res.send(tracker.reverse()).status(200)
 
     }
     else {
