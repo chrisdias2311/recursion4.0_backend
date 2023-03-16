@@ -9,12 +9,27 @@ const multer = require('../middlewares/multer')
 const otpGenerator = require('otp-generator');
 const auth = require('../mailhandelling/auth');
 const mongoose = require('mongoose')
-const pass_otp = require('../mailhandelling/passotp')
+const pass_otp = require('../mailhandelling/passotp');
+const TrackSchema = require('../schemas/TrackSchema');
 const secretKey = "secretKey";
 
 const URL = `https://recursion4-0-backend-server.onrender.com`//`https://uniexserver.onrender.com` 
 
 
+router.post('/gettransactions', async (req, res) => {
+    const tracker = await TrackSchema.find({ buyeremail: req.body.email }).catch((err) => {
+        console.log(err)
+        res.send('internal error').status(500)
+    });
+
+    if (tracker) {
+        res.send(tracker).status(200)
+
+    }
+    else {
+        res.send('transactions not available').status(400);
+    }
+})
 
 
 //Rigister (alternative to Signup)
