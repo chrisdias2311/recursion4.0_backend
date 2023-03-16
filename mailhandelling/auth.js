@@ -29,12 +29,11 @@ async function sendOtp(otp, email) {
                 cid: 'logo'
             },
             html: `
-        <body style = "background-color: #212121;">
-            <center><img style="width:10em;"src="cid:logo"></center>
-            <div style="background-color: #262626;color:antiquewhite; ">
-            <h3 style="text-align: center;padding-top: 20px;">Use this verification code to verify your email.</h3>
-            <h1 style="padding-top: 100px;padding-bottom: 100px;text-align: center;" >Your otp is 
-        <code style="font-size:1.2em; background:#262626;padding:5px">${otp}</code></h1></div></body>
+        <body >
+            <div >
+            <h3 >Use this verification code to verify your email.</h3>
+            <h1 >Your otp is 
+        <code>${otp}</code></h1></div></body>
         `
         })
         console.log("message has been sent: %s", info.messageId);
