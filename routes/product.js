@@ -251,19 +251,19 @@ router.post('/downloadproduct', async (req, res) => {
 
 
 
-router.post('/productdetails', async (req, res) => {
-    try {
-        let product = await Product.findOne({ _id: mongoose.Types.ObjectId(req.body.productid) });
-        if (product) {
-            res.send(product)
-        } else {
-            res.send("No product found")
-        }
-    } catch (error) {
-        console.log(error)
-        res.send(error)
-    }
-})
+// router.post('/productdetails', async (req, res) => {
+//     try {
+//         let product = await Product.findOne({ _id: mongoose.Types.ObjectId(req.body.productid) });
+//         if (product) {
+//             res.send(product)
+//         } else {
+//             res.send("No product found")
+//         }
+//     } catch (error) {
+//         console.log(error)
+//         res.send(error)
+//     }
+// })
 
 
 router.post('/updateproduct', async (req, res) => {
