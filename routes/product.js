@@ -38,12 +38,15 @@ router.post("/addproduct", multer.upload.single("file"), async (req, res) => {
             targetgender: req.body.targetgender,
             targetage: req.body.targetage
         });
+        let productId;
+        const saved = await newProduct.save(function (err, product) {
+            productId = product._id;
+        });
 
-        const saved = await newProduct.save();
-        res.send(newProduct)
+        res.send(productId).status(200);
     } catch (error) {
         console.log(error);
-        res.send(error)
+        res.send(error).status(400);
     }
 })
 

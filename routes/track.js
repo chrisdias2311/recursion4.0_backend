@@ -73,4 +73,21 @@ router.post('/settracker', async (req, res) => {
     }
 })
 
+
+router.post('/getalltrackers', async (req, res) => {
+    try {
+        const trackers = await Track.Find({})
+        if (trackers.length > 0) {
+            trackers.reverse();
+            res.send(trackers).status(200)
+        }
+        else {
+            res.send({ result: "no products to track" })
+        }
+    } catch (error) {
+        console.log(error)
+        res.send('internal error').status(500);
+    }
+})
+
 module.exports = router;
