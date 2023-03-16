@@ -15,7 +15,7 @@ const Retailer = require('../schemas/SellerSchema');
 
 const secretKey = "secretKey";
 
-const URL = `https://uniexserver.onrender.com`
+const URL = `https://recursion4-0-backend-server.onrender.com`
 
 
 

@@ -12,7 +12,7 @@ const mongoose = require('mongoose')
 const pass_otp = require('../mailhandelling/passotp')
 const secretKey = "secretKey";
 
-const URL = `https://localhost:5000`//`https://uniexserver.onrender.com` 
+const URL = `https://recursion4-0-backend-server.onrender.com`//`https://uniexserver.onrender.com` 
 
 
 

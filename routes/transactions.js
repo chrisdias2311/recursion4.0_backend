@@ -13,7 +13,7 @@ const multer = require('../middlewares/multer')
 
 const secretKey = "secretKey";
 
-const URL = `https://uniexserver.onrender.com`
+const URL = `https://recursion4-0-backend-server.onrender.com`
 
 
 
@@ -48,13 +48,13 @@ router.post('/mytransactions', async (req, res) => {
 router.post('/trasactiondetails', async (req, res) => {
     try {
         let transaction = await Transaction.findOne({ _id: mongoose.Types.ObjectId(req.body.tid) });
-        if(transaction){
+        if (transaction) {
             res.send(transaction)
-        }else{
+        } else {
             res.send("No transaction found")
         }
     } catch (error) {
-        
+
     }
 })
 
@@ -62,13 +62,13 @@ router.post('/trasactiondetails', async (req, res) => {
 router.post('/userdetails', async (req, res) => {
     try {
         let user = await User.findOne({ _id: mongoose.Types.ObjectId(req.body.userid) });
-        if(user){
+        if (user) {
             res.send(user)
-        }else{
+        } else {
             res.send("No User found")
         }
     } catch (error) {
-        
+
     }
 })
 
