@@ -73,7 +73,7 @@ router.get('/allproducts', async (req, res) => {
     }
 })
 
-router.get('/productdetails', async (req, res) => {
+router.post('/productdetails', async (req, res) => {
     try {
         let product = await Product.findOne({ _id: mongoose.Types.ObjectId(req.body.id) })
         if (product) {
