@@ -333,11 +333,12 @@ router.post('/selectproduct', async (req, res) => {
     try {
         if (Find) {
             const update = await Product.updateOne({ _id: mongoose.Types.ObjectId(req.body.id) }, { $set: { quantity: (Find.quantity - 1) } })
-            let tracker;
-            try {
-                let arrival_date = (new Date).toString()
 
-                let slicedarrival = arrival_date.substring(0, 16);
+            try {
+                let arrival_date = new Date();
+                arrival_date.setDate(arrival_date.getDate() + 2);
+                let stringDate = arrival_date.toString();
+                let slicedarrival = stringDate.substring(0, 16);
                 let transDate = (new Date).toString()
                 let slicedDate = transDate.substring(0, 16);
                 const newTrack = new Track(
