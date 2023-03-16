@@ -28,11 +28,16 @@ router.post('/getstatus', async (req, res) => {
         const Buyer = await User.findOne({ email: FindProduct.buyeremail })
         const Image = await ProductSchema.findOne({ _id: mongoose.Types.ObjectId(FindProduct.productId) })
         if (FindProduct) {
-            res.status(200).send(FindProduct, Buyer.firstname, Image.productImage);
+            let combined = { FindProduct, Buyer, Image }
+            res.status(200).send(combined);
+        }
+        else {
+            res.send('no product with that id exists').status(400);
         }
     }
     catch (error) {
         res.status(500).send('internal error');
+        console.log(error)
 
     }
 })
