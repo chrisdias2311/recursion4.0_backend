@@ -118,9 +118,9 @@ router.post('/getuser', async (req, res) => {
     try {
         let user = await User.findOne({ email: (req.body.verifyEmail).toLowerCase() })
         if (user) {
-            res.send(user).send(200);
+            res.send(user).status(200);
         } else {
-            res.send("No seller found").send(400);
+            res.send("No seller found").status(400);
         }
     } catch (error) {
 
