@@ -13,7 +13,7 @@ const multer = require('../middlewares/multer')
 const sendMail = require('../mailhandelling/book')
 const Retailer = require('../schemas/SellerSchema');
 const { read } = require('fs');
-
+const Track = require('../schemas/TrackSchema')
 const secretKey = "secretKey";
 
 const URL = `http://localhost:5000`
@@ -202,8 +202,7 @@ router.post('/bookproduct', async (req, res) => {
                     }
                 }
             )
-            let product = await Product.findOne({ _id: mongoose.Types.ObjectId(req.body.id) })
-            sendMail.sendBooked(product.name, Seller.email)
+            let product = aemailked(product.name, Seller.email)
             console.log(booked)
             // res.status(200).send("Product deleted successfully!")
         } catch (error) {
