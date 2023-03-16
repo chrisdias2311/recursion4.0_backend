@@ -16,6 +16,9 @@ const trackSchema = mongoose.Schema({
     },
     location: {
         type: String,
+    },
+    buyeremail: {
+        type: String,
     }
 });
 
